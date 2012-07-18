@@ -1,33 +1,41 @@
 #!/usr/bin/python2.7
 
-import argparse,string
+import string
 from random import randint
 
-def get_polybius(mixed=False,omit='j'):
+def get_polybius(mixed=False,omit='j',alphabet=[]):
     """
-    Produces a five by five polybius square, populated with
-    lowercase letters. One letter must be omitted to fit 
-    alphabet into the square. 
-    Supports filling square with random, non-repeating letters.
+    Returns a dicitionary with chars as keys mapped to their coordinates
+    (y,x) in a five by five polybius square.
+    Letters are mapped from  one to five, inclusive.
+
+    Argument explanation:
+        
+        mixed:
+            Boolean. If True the position of the letters will be randomized
+            Defaults to False.
+        omit:
+            Char. The char to omit from the alphabet so it will cleanly fit
+            into a 5 by 5 square. Defaults to 'j'. 
+        alpha:
+            List. The alphabet to use in the square. Be sure it has 26 chars
+            and contains omit. Defaults to list(string.ascii_lowercase)
+    
     """
-    alphabet = list(string.ascii_lowercase)
+    if not alphabet:
+       alphabet = list(string.ascii_lowercase)
     alphabet.remove(omit)
     size = 5
+    coords = {}
 
-    square = [[0 for i in range(size)] for i in range(size)]
-    
-    alpha_dex = 0
-    for i in square:
-        index = 0
-        while index < size:
+    for x in range(5,0,-1):
+        for y in range(5,0,-1):
             if mixed:
                 rand = randint(0,len(alphabet)-1)
-                i[index] = alphabet[rand]
+                coords[alphabet[rand]] = (y,x)
                 del alphabet[rand]
             else:
-                i[index] = alphabet[alpha_dex]
-                alpha_dex += 1
-            index += 1
-    
-    return square
+                coords[alphabet.pop()] = (x,y)
+    return coords
+
 
