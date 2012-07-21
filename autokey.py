@@ -30,8 +30,20 @@ def create_cipher(args):
             cipher.append(inverse_letter_map[(plain_value+key_value)%26])
 
         return ''.join(cipher)
+    elif args.decipher:
+        
+        cipher_text = text
+        plain_text = []
 
-
+        for i in range(len(cipher_text)):
+            cipher_value = letter_map[cipher_text[i]]
+            key_value = letter_map[key[i]]
+            decipher_letter = inverse_letter_map[(cipher_value-key_value)%26]
+            plain_text.append(decipher_letter)
+            if len(key) < len(cipher_text):
+                key.append(decipher_letter)
+        
+        return ''.join(plain_text)
 
 
 
