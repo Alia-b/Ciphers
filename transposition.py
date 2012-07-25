@@ -2,7 +2,7 @@
 import argparse
 from itertools import chain
 
-def transpose(text,key):
+def get_table(text,key):
     cipher_table  = []
     
     for i in key:
@@ -12,10 +12,13 @@ def transpose(text,key):
     for i in text:
         cipher_table[position][1].append(i)
         position = (position + 1)%len(cipher_table)
-
-    sorted_key = list(key)
-    sorted_key.sort()
     
+    return cipher_table
+
+def transpose(text,key):
+    
+    sorted_key = sorted(key)
+    cipher_table = get_table(text,key)
     cipher_lists = []
 
     for i in sorted_key:
@@ -27,7 +30,37 @@ def transpose(text,key):
     return ''.join(list(flattened))
 
 def decipher(cipher_text,key):
-    pass
+    table = get_table(cipher_text,key)
+    sorted_key = sorted(key) 
+    
+    ordered_table = []
+    pos = 0
+    for letter in sorted_key:
+        for i in range(len(table)):
+            if table[i][0] == letter and table[i] not in ordered_table :
+                for k in range(len(table[i][1])):
+                    table[i][1][k] = cipher_text[pos]
+                    pos +=1
+                ordered_table.append(table[i])
+    
+    
+    restored_table = []
+    for i in key:
+        for k in ordered_table:
+            if k[0] == i and k[1] not in restored_table:
+                restored_table.append(k[1])
+                break 
+    
+    plain_text = []
+    place = 0
+    while place < len(restored_table[0]):
+        for entry in restored_table:
+            if place < len(entry):
+                plain_text.append(entry[place])
+        place += 1
+
+    return ''.join(plain_text)
+
 
 def create_cipher(args):
     """
