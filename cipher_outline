@@ -1,0 +1,20 @@
+import argparse
+
+def create_cipher(args):
+    """
+    Cipher things in a specified way.
+    """
+
+
+
+parser = argparse.ArgumentParser(description="A cipher")
+parser.add_argument('--cipher','-c',help="Cipher the text",
+                    action="store_true")
+parser.add_argument('--decipher','-d',help="Decipher the text",
+                    action="store_true")
+parser.add_argument('text',help="The text to work on.")
+parser.add_argument('key',help="The key to use.")
+
+parser.set_defaults(func=create_cipher)
+args=parser.parse_args()
+print args.func(args)
