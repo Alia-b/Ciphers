@@ -42,10 +42,6 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
     size = 5
     coords = {}
     
-    print key
-    print alphabet
-    print mixed
-
     for x in range(5,0,-1):
         for y in range(5,0,-1):
             if alphabet:
