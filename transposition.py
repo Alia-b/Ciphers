@@ -3,6 +3,21 @@ import argparse
 from itertools import chain
 
 def get_table(text,key):
+    """
+    Creates and returns the table used for ciphering.
+
+    Example:
+    
+    key = farce
+    text = MeetAtNoonByTheWesternGate 
+    
+    cipher_table =
+    ['F', ['M', 'T', 'B', 'W', 'R', 'E']]
+    ['A', ['E', 'N', 'Y', 'E', 'N']]
+    ['R', ['E', 'O', 'T', 'S', 'G']]
+    ['C', ['T', 'O', 'H', 'T', 'A']]
+    ['E', ['A', 'N', 'E', 'E', 'T']]
+    """
     cipher_table  = []
     
     for i in key:
@@ -13,14 +28,21 @@ def get_table(text,key):
         cipher_table[position][1].append(i)
         position = (position + 1)%len(cipher_table)
     
+    for i in cipher_table:
+        print i
     return cipher_table
 
 def transpose(text,key):
-    
+    '''
+    Transposes the text.
+    '''
+
     sorted_key = sorted(key)
     cipher_table = get_table(text,key)
     cipher_lists = []
-
+    
+    #Grabs the char lists from table in the specified order and resorts
+    #them to alphabetical by key order. 
     for i in sorted_key:
         for k in range(len(cipher_table)):
             if cipher_table[k][0] == i and cipher_table[k][1] not in cipher_lists:
@@ -30,9 +52,16 @@ def transpose(text,key):
     return ''.join(list(flattened))
 
 def decipher(cipher_text,key):
+    '''
+    Deciphers the text.
+    '''
+    #The letter order in the table is useless, but the dimensions are
+    #identical to the table used to cipher the text. Consider it 
+    #filled with nulls.. 
     table = get_table(cipher_text,key)
     sorted_key = sorted(key) 
     
+    #Creates an ordered table with the rows in sorted order.
     ordered_table = []
     pos = 0
     for letter in sorted_key:
@@ -43,14 +72,16 @@ def decipher(cipher_text,key):
                     pos +=1
                 ordered_table.append(table[i])
     
-    
+    #Restored_table is identical to the table created during ciphering
+    #with get_table(text,key)
     restored_table = []
     for i in key:
         for k in ordered_table:
             if k[0] == i and k[1] not in restored_table:
                 restored_table.append(k[1])
                 break 
-    
+
+    #Extracts the text from restored_table
     plain_text = []
     place = 0
     while place < len(restored_table[0]):
