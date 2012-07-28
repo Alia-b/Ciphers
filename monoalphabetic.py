@@ -2,6 +2,27 @@
 import argparse
 import string
 
+def get_sub_map(from_alphabet,to_alphabet):
+    '''
+    Creates the dictionary for substitution lookup.
+    Uses from_alphabet as keys and to_alphabet as values
+    '''
+    sub_map = {}
+    for i in range(len(from_alphabet)):
+        sub_map[from_alphabet[i]] = to_alphabet[i]
+    
+    return sub_map
+
+def substitute(in_text,substitution_map):
+        out_text = []
+        for i in in_text:
+            if i not in substitution_map:
+                out_text.append(i)
+            else:
+                out_text.append(substitution_map[i])
+
+        return ''.join(out_text)
+
 def create_cipher(args):
     """
     A simple monoalphabetic substitution cipher with a user-supplied
@@ -10,35 +31,18 @@ def create_cipher(args):
     Note that we are only working with letters so the supplied 
     alphabet must be 26 characters long.
     """
-    alphabet = list(args.alphabet.upper())
-    if args.cipher:
-        plain_text = args.text.upper()
-        
-        substitution_map = {}
-        for i in string.ascii_uppercase:
-            substitution_map[i] = alphabet[0]
-            del alphabet[0]
-
-        cipher_text = []
-        for i in plain_text:
-            cipher_text.append(substitution_map[i])
-
-        return ''.join(cipher_text)
+    if args.text:
+        in_text = args.text.upper()        
+    elif args.file:
+        in_text =  open(args.file).read().upper()
     
+    if args.cipher:
+        sub_map = get_sub_map(string.ascii_uppercase,args.alphabet)
     elif args.decipher:
-        cipher_text = args.text.upper()
+        sub_map = get_sub_map(args.alphabet,string.ascii_uppercase)
 
-        substitution_map = {}
-        plain_alphabet = list(string.ascii_uppercase)
-        for i in alphabet:
-            substitution_map[i] = plain_alphabet[0]
-            del plain_alphabet[0]
-        
-        plain_text = []
-        for i in cipher_text:
-            plain_text.append(substitution_map[i])
-
-        return ''.join(plain_text)
+    return substitute(in_text,sub_map)
+    
 
 
 parser = argparse.ArgumentParser(description="A cipher")
@@ -46,7 +50,8 @@ parser.add_argument('--cipher','-c',help="Cipher the text",
                     action="store_true")
 parser.add_argument('--decipher','-d',help="Decipher the text",
                     action="store_true")
-parser.add_argument('text',help="The text to work on.")
+parser.add_argument('--text','-t',help="The text to work on.")
+parser.add_argument('--file','-f',help="The file to work on.")
 parser.add_argument('alphabet',help="The substitution alphabet to use.")
 
 parser.set_defaults(func=create_cipher)
