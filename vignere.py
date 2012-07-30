@@ -15,13 +15,11 @@ def get_letter_maps():
     return letter_map,inverse_letter_map
 
 def get_key(key_seed,length):
-    ##Optimize with str*num function
-    key = []
+    key = key_seed*(length/len(key_seed))
 
-    pos = 0
-    while len(key) != length:
-        key.append(key_seed[pos%len(key_seed)])
-        pos += 1
+    if len(key) < length:
+        key += key_seed[-(length-len(key)):]
+
     return key
 
 def cipher(in_text,key,decipher):
