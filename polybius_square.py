@@ -7,7 +7,7 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
     """
     Returns a dicitionary with chars as keys mapped to their coordinates
     (y,x) in a five by five polybius square.
-    Letters are mapped from  one to five, inclusive.
+    Letters are mapped from  zero to four, inclusive.
 
     Argument explanation:
         key:
@@ -42,8 +42,8 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
     size = 5
     coords = {}
     
-    for x in range(5,0,-1):
-        for y in range(5,0,-1):
+    for x in range(4,-1,-1):
+        for y in range(4,-1,-1):
             if alphabet:
                 if mixed:
                     rand = randint(0,len(alphabet)-1)
