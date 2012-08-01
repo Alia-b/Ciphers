@@ -3,6 +3,13 @@
 import string
 from random import randint
 
+def remove_duplicates(string):
+    out_string = []
+    for i in string:
+        if i not in out_string:
+            out_string.append(i)
+    return ''.join(out_string)
+
 def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
     """
     Returns a dicitionary with chars as keys mapped to their coordinates
@@ -33,13 +40,14 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
     if not alphabet:
        alphabet = list(string.ascii_lowercase)
     if key:
+        key = remove_duplicates(key)
         key = list(key.replace(omit,switch))
         #Remove the letters of key from alphabet to avoid duplicates.
         for char in key:
             alphabet.remove(char)
     if omit in alphabet:
         alphabet.remove(omit)
-    size = 5
+    
     coords = {}
     
     for x in range(4,-1,-1):
