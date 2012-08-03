@@ -1,6 +1,6 @@
 import warnings
 
-def get_digrams(text,null='x'):
+def get_digrams(text,null='x',allow_doubles=False):
     """
     Returns a list of digrams for text.
 
@@ -15,17 +15,18 @@ def get_digrams(text,null='x'):
         warnings.warn(
         "Text contains null. This could cause an infinite loop."
             )
+    if not allow_doubles:
+        while True:
+            '''
+            Adds null between all repeating characters.
+            '''
+            for i in range(len(text)-1):
+                if text[i] == text[i+1]:
+                    text = text[:i+1] + list(null) +text[i+1:]
+                    break 
+            else:
+                break
     
-    while True:
-        '''
-        Adds null between all repeating characters.
-        '''
-        for i in range(len(text)-1):
-            if text[i] == text[i+1]:
-                text = text[:i+1] + list(null) +text[i+1:]
-                break 
-        else:
-            break
     if len(text) % 2 != 0:
         text.append(null)
     
