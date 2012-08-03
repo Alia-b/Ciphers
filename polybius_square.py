@@ -3,6 +3,13 @@
 import string
 from random import randint
 
+def get_inverse(dict):
+    '''Returns the inverse of the suplied dictionary'''
+    inverse = {}
+    for i in dict:
+        inverse[dict[i]]=i
+    return inverse
+
 def remove_duplicates(string):
     out_string = []
     for i in string:
@@ -10,7 +17,7 @@ def remove_duplicates(string):
             out_string.append(i)
     return ''.join(out_string)
 
-def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
+def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[],inverse_map=False):
     """
     Returns a dicitionary with chars as keys mapped to their coordinates
     (y,x) in a five by five polybius square.
@@ -35,7 +42,8 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
         alpha:
             List. The alphabet to use in the square. Be sure it has 26 chars
             and contains omit. Defaults to list(string.ascii_lowercase)
-    
+        inverse_map:
+            Boolean. If true also return the inverse dictionary (coordinates to letters)
     """
     if not alphabet:
        alphabet = list(string.ascii_lowercase)
@@ -61,6 +69,9 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[]):
                     coords[alphabet.pop()] = (x,y)
             else:
                 coords[key.pop()] = (x,y)
-    return coords
+    if inverse_map:
+        return coords, get_inverse(coords)
+    else:
+        return coords
 
 
