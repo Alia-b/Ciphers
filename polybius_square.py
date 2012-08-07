@@ -2,6 +2,7 @@
 
 import string
 from random import randint
+from math import sqrt
 
 def get_inverse(dict):
     '''Returns the inverse of the suplied dictionary'''
@@ -20,8 +21,8 @@ def remove_duplicates(string):
 def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[],inverse_map=False):
     """
     Returns a dicitionary with chars as keys mapped to their coordinates
-    (y,x) in a five by five polybius square.
-    Letters are mapped from  zero to four, inclusive.
+    (y,x) in a polybius square.
+    Letters are mapped from  zero to sqrt(len(alphabet+key)), inclusive.
 
     Argument explanation:
         key:
@@ -40,8 +41,9 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[],inverse_map=
             Defaults to 'i'. If changing key or omit, switch must be changed
             or get_polybius will produce unexpected behavior.
         alpha:
-            List. The alphabet to use in the square. Be sure it has 26 chars
-            and contains omit. Defaults to list(string.ascii_lowercase)
+            List. The alphabet to use in the square. Must be able to cleanly fit 
+            into a square after removing omit.
+            Defaults to list(string.ascii_lowercase)
         inverse_map:
             Boolean. If true also return the inverse dictionary (coordinates to letters)
     """
@@ -55,11 +57,16 @@ def get_polybius(key='',mixed=False,omit='j',switch='i',alphabet=[],inverse_map=
             alphabet.remove(char)
     if omit in alphabet:
         alphabet.remove(omit)
-    
+   
+    if not key:
+        square_size = int(sqrt(len(alphabet)))
+    else:
+        square_size = int(sqrt(len(alphabet)+len(key)))
+
     coords = {}
     
-    for x in range(4,-1,-1):
-        for y in range(4,-1,-1):
+    for x in range(square_size-1,-1,-1):
+        for y in range(square_size-1,-1,-1):
             if alphabet:
                 if mixed:
                     rand = randint(0,len(alphabet)-1)
